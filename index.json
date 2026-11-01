@@ -1,0 +1,43 @@
+{
+  "format": 1,
+  "title": "Polymux plugins",
+  "plugins": [
+    {
+      "name": "permissions",
+      "title": "Permissions",
+      "description": "Set rules a chat's bots can't break: what they may read, write, run and use.",
+      "symbol": "lock.shield",
+      "kind": "scoped",
+      "surface": "permissions",
+      "author": "Polymux",
+      "homepage": "https://github.com/CarlvinceTan/polymux-official-plugins",
+      "versions": [
+        {
+          "version": "0.1.0",
+          "publishTimestamp": 1793517778,
+          "engines": {
+            "plugins": 2
+          },
+          "source": {
+            "repository": "CarlvinceTan/polymux-official-plugins",
+            "commit": "41cb17cefc569e88223d544cf6f95418ba0f4535",
+            "artifacts": {
+              "darwin-arm64": {
+                "url": "https://github.com/CarlvinceTan/polymux-official-plugins/releases/download/permissions-v0.1.0/permissions-0.1.0-darwin-arm64.tgz",
+                "sha256": "af5bfbff14ca98a9f1096a492d1f9bb088c1c4e636898707330c656a1e22b137"
+              },
+              "linux-amd64": {
+                "url": "https://github.com/CarlvinceTan/polymux-official-plugins/releases/download/permissions-v0.1.0/permissions-0.1.0-linux-amd64.tgz",
+                "sha256": "67633c6fd7fce6cb3c1fd0bda99f8846dd689f2e1fdd6cbef874455b5e5a0be4"
+              },
+              "linux-arm64": {
+                "url": "https://github.com/CarlvinceTan/polymux-official-plugins/releases/download/permissions-v0.1.0/permissions-0.1.0-linux-arm64.tgz",
+                "sha256": "e2adfd226de635acce0de596ddf0ba34e63cf145f9ea9f32123764c5efb9241a"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
