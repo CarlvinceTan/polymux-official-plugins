@@ -3,6 +3,43 @@
   "title": "Polymux plugins",
   "plugins": [
     {
+      "name": "hub",
+      "title": "Hub",
+      "description": "Your messages and mail in one place.",
+      "symbol": "tray.2",
+      "kind": "global",
+      "surface": "hub",
+      "author": "Polymux",
+      "homepage": "https://github.com/CarlvinceTan/polymux-official-plugins",
+      "versions": [
+        {
+          "version": "0.1.0",
+          "publishTimestamp": 1793526669,
+          "engines": {
+            "plugins": 1
+          },
+          "source": {
+            "repository": "CarlvinceTan/polymux-official-plugins",
+            "commit": "a365bb4e74bdbc1e85ff9a6e81198a28615bce7e",
+            "artifacts": {
+              "darwin-arm64": {
+                "url": "https://github.com/CarlvinceTan/polymux-official-plugins/releases/download/hub-v0.1.0/hub-0.1.0-darwin-arm64.tgz",
+                "sha256": "063a26260d5f0ef7383d2a404fb564be1842073cfc6f98347c22ed0a748098c6"
+              },
+              "linux-amd64": {
+                "url": "https://github.com/CarlvinceTan/polymux-official-plugins/releases/download/hub-v0.1.0/hub-0.1.0-linux-amd64.tgz",
+                "sha256": "01e8bb978189c55cb1a145a272b377f008ed8797faee2c95e99d5d04c50fb4fc"
+              },
+              "linux-arm64": {
+                "url": "https://github.com/CarlvinceTan/polymux-official-plugins/releases/download/hub-v0.1.0/hub-0.1.0-linux-arm64.tgz",
+                "sha256": "a27c132f3e73eaf4157f15b1ee36ededc999f25967d40432dadde66c531b0a5b"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
       "name": "permissions",
       "title": "Permissions",
       "description": "Set rules a chat's bots can't break: what they may read, write, run and use.",
