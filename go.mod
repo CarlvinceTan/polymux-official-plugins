@@ -8,6 +8,7 @@ require (
 	github.com/emersion/go-sasl v0.0.0-20241020182733-b788ff22d5a6
 	golang.org/x/oauth2 v0.37.0
 	modernc.org/sqlite v1.61.1
+	mvdan.cc/sh/v3 v3.14.1
 )
 
 require (

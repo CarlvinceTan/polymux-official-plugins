@@ -6,6 +6,7 @@ Plugins maintained by the Polymux team, and the registry index Polymux reads the
 | --- | --- |
 | [`hub`](plugins/hub) | Your messages and mail in one place, with bridges to chat networks. |
 | [`tailscale`](plugins/tailscale) | Reaches your server from other devices over your tailnet. |
+| [`permissions`](plugins/permissions) | Rules a chat's bots can't break: what they may read, write, run and use. |
 
 ## Layout
 
