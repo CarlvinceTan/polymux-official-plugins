@@ -46,7 +46,7 @@ jobs:
       - uses: actions/setup-go@v6
         with:
           go-version-file: go.mod
-      - run: go test ./plugins/$NAME/...
+      - run: go test "./plugins/$NAME/..."
       # A plugin that ships other programs beside its service says how to get them.
       - run: |
           if [ -x "plugins/$NAME/prepare.sh" ]; then
