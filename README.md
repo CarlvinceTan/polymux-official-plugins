@@ -4,13 +4,14 @@ Plugins maintained by the Polymux team, and the registry index Polymux reads the
 
 | Plugin | What it does |
 | --- | --- |
+| [`hub`](plugins/hub) | Your messages and mail in one place, with bridges to chat networks. |
 | [`tailscale`](plugins/tailscale) | Reaches your server from other devices over your tailnet. |
 
 ## Layout
 
 - `plugins/<name>/`: one folder per plugin, with its `plugin.json` and the Go program its `service` runs.
 - `index.json`: the registry. CI adds each release to it and never removes older versions.
-- `scripts/package.sh <plugin>`: builds `dist/<plugin>/<plugin>-<version>-<target>.tgz` and its checksum.
+- `scripts/package.sh <plugin>`: builds `dist/<plugin>/<plugin>-<version>-<target>.tgz` and its checksum. A plugin that ships other programs gives a `prepare.sh` and packages them with `POLYMUX_PLUGIN_BINARIES`.
 - `scripts/index.py`: merges a built package into `index.json`.
 
 ## Release

@@ -1,6 +1,7 @@
 #!/bin/sh
 # Build one plugin's package. Usage: scripts/package.sh <plugin> [out dir]
 # POLYMUX_PLUGIN_TARGET names the target (default: this machine's os-arch).
+# POLYMUX_PLUGIN_BINARIES is a folder whose files ship in bin/ beside the service.
 set -eu
 ROOT=$(CDPATH='' cd -- "$(dirname -- "$0")/.." && pwd)
 NAME=${1:?usage: scripts/package.sh <plugin> [out dir]}
@@ -16,7 +17,10 @@ trap 'rm -rf "$STAGE"' EXIT
 mkdir -p "$STAGE/$(dirname "$SERVICE")" "$OUT"
 cp "$ROOT/plugins/$NAME/plugin.json" "$STAGE/"
 (cd "$ROOT" && CGO_ENABLED=0 go build -trimpath -o "$STAGE/$SERVICE" "./plugins/$NAME")
-chmod 755 "$STAGE/$SERVICE"
+if [ -n "${POLYMUX_PLUGIN_BINARIES:-}" ]; then
+  find "$POLYMUX_PLUGIN_BINARIES" -maxdepth 1 -type f -exec cp {} "$STAGE/$(dirname "$SERVICE")/" \;
+fi
+chmod 755 "$STAGE/$(dirname "$SERVICE")"/*
 FILE="$OUT/$NAME-$VERSION-$TARGET.tgz"
 tar -czf "$FILE" -C "$STAGE" .
 shasum -a 256 "$FILE" | cut -d' ' -f1 > "$FILE.sha256"

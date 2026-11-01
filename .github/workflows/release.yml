@@ -38,13 +38,22 @@ jobs:
           - { runner: ubuntu-24.04, target: linux-amd64 }
           - { runner: ubuntu-24.04-arm, target: linux-arm64 }
     runs-on: ${{ matrix.runner }}
+    env:
+      GH_TOKEN: ${{ github.token }}
+      NAME: ${{ needs.plugin.outputs.name }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-go@v6
         with:
           go-version-file: go.mod
-      - run: go test ./plugins/${{ needs.plugin.outputs.name }}/...
-      - run: POLYMUX_PLUGIN_TARGET=${{ matrix.target }} scripts/package.sh ${{ needs.plugin.outputs.name }} dist/packages
+      - run: go test ./plugins/$NAME/...
+      # A plugin that ships other programs beside its service says how to get them.
+      - run: |
+          if [ -x "plugins/$NAME/prepare.sh" ]; then
+            "plugins/$NAME/prepare.sh" ${{ matrix.target }} .build/binaries
+            echo "POLYMUX_PLUGIN_BINARIES=$PWD/.build/binaries" >> "$GITHUB_ENV"
+          fi
+      - run: POLYMUX_PLUGIN_TARGET=${{ matrix.target }} scripts/package.sh "$NAME" dist/packages
       - uses: actions/upload-artifact@v5
         with:
           name: package-${{ matrix.target }}
