@@ -1,0 +1,74 @@
+name: Release plugin
+
+# Run from Actions with the plugin's name, or push a tag named <plugin>-v<version>.
+on:
+  workflow_dispatch:
+    inputs:
+      plugin:
+        description: Plugin to release
+        required: true
+  push:
+    tags: ['*-v*']
+
+permissions:
+  contents: write
+
+jobs:
+  plugin:
+    runs-on: ubuntu-24.04
+    outputs:
+      name: ${{ steps.plugin.outputs.name }}
+      tag: ${{ steps.plugin.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v7
+      - id: plugin
+        run: |
+          name="${{ inputs.plugin }}"
+          [ -n "$name" ] || name="${GITHUB_REF_NAME%-v*}"
+          version=$(python3 -c "import json,sys;print(json.load(open(sys.argv[1]))['version'])" "plugins/$name/plugin.json")
+          echo "name=$name" >> "$GITHUB_OUTPUT"
+          echo "tag=$name-v$version" >> "$GITHUB_OUTPUT"
+
+  package:
+    needs: plugin
+    strategy:
+      matrix:
+        include:
+          - { runner: macos-26, target: darwin-arm64 }
+          - { runner: ubuntu-24.04, target: linux-amd64 }
+          - { runner: ubuntu-24.04-arm, target: linux-arm64 }
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+      - run: go test ./plugins/${{ needs.plugin.outputs.name }}/...
+      - run: POLYMUX_PLUGIN_TARGET=${{ matrix.target }} scripts/package.sh ${{ needs.plugin.outputs.name }} dist/packages
+      - uses: actions/upload-artifact@v5
+        with:
+          name: package-${{ matrix.target }}
+          path: dist/packages
+
+  publish:
+    needs: [plugin, package]
+    runs-on: ubuntu-24.04
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+      - uses: actions/download-artifact@v5
+        with:
+          path: dist/packages
+          merge-multiple: true
+      - run: gh release create "${{ needs.plugin.outputs.tag }}" --title "${{ needs.plugin.outputs.tag }}" --notes "${{ needs.plugin.outputs.name }} plugin packages." dist/packages/*.tgz
+      - run: python3 scripts/index.py "${{ needs.plugin.outputs.name }}" dist/packages "https://github.com/${{ github.repository }}/releases/download/${{ needs.plugin.outputs.tag }}" --commit "$GITHUB_SHA"
+      - name: Commit the index
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.json
+          git commit -m "Publish ${{ needs.plugin.outputs.tag }}"
+          git push origin main
