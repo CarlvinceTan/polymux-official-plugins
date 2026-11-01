@@ -7,6 +7,7 @@ Hub runs with bridge encryption off anyway.
 """
 import hashlib
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -36,10 +37,21 @@ def asset(name, target):
     return f'{name}-{arch}' if system == 'linux' else f'{name}-darwin-{arch}'
 
 
+# mautrix-signal links libsignal's Rust library, kept as a submodule; the flags match upstream's build-rust.sh.
+def build_libsignal(folder):
+    source = Path(folder) / 'pkg/libsignalgo/libsignal'
+    subprocess.check_call(['cargo', 'build', '-p', 'libsignal-ffi', '--profile=release'], cwd=source,
+                          env=os.environ | {'RUSTFLAGS': '-Ctarget-feature=-crt-static', 'RUSTC_WRAPPER': ''})
+    return str(source / 'target/release')
+
+
 def build(repository, tag, name, out):
     with tempfile.TemporaryDirectory() as folder:
-        subprocess.check_call(['git', 'clone', '--quiet', '--depth', '1', '--branch', tag, f'https://github.com/mautrix/{repository}.git', folder])
-        subprocess.check_call(['go', 'build', '-tags', 'nocrypto', '-o', str((out / name).resolve()), f'./cmd/{name}'], cwd=folder)
+        subprocess.check_call(['git', 'clone', '--quiet', '--depth', '1', '--recurse-submodules', '--shallow-submodules', '--branch', tag, f'https://github.com/mautrix/{repository}.git', folder])
+        env = os.environ | ({'LIBRARY_PATH': build_libsignal(folder)} if name == 'mautrix-signal' else {})
+        # mautrix-discord's main package is the repository root.
+        package = '.' if name == 'mautrix-discord' else f'./cmd/{name}'
+        subprocess.check_call(['go', 'build', '-tags', 'nocrypto', '-o', str((out / name).resolve()), package], cwd=folder, env=env)
 
 
 def build_imessage(out):
