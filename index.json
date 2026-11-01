@@ -38,6 +38,43 @@
           }
         }
       ]
+    },
+    {
+      "name": "tailscale",
+      "title": "Tailscale",
+      "description": "Reach this server from your other devices over your tailnet.",
+      "symbol": "",
+      "kind": "global",
+      "surface": "",
+      "author": "Polymux",
+      "homepage": "https://github.com/CarlvinceTan/polymux-official-plugins",
+      "versions": [
+        {
+          "version": "0.1.0",
+          "publishTimestamp": 1793519001,
+          "engines": {
+            "plugins": 1
+          },
+          "source": {
+            "repository": "CarlvinceTan/polymux-official-plugins",
+            "commit": "be45cc6640f82b244c223732aea3ead93f274a1e",
+            "artifacts": {
+              "darwin-arm64": {
+                "url": "https://github.com/CarlvinceTan/polymux-official-plugins/releases/download/tailscale-v0.1.0/tailscale-0.1.0-darwin-arm64.tgz",
+                "sha256": "1e909e8fd7ac54509087447e26f377055bb5f711182c82b73f5086e90154a168"
+              },
+              "linux-amd64": {
+                "url": "https://github.com/CarlvinceTan/polymux-official-plugins/releases/download/tailscale-v0.1.0/tailscale-0.1.0-linux-amd64.tgz",
+                "sha256": "1db41f37fc31998f9e856bf73d807c43ab5be80955bb99e0e7f69b892368a00e"
+              },
+              "linux-arm64": {
+                "url": "https://github.com/CarlvinceTan/polymux-official-plugins/releases/download/tailscale-v0.1.0/tailscale-0.1.0-linux-arm64.tgz",
+                "sha256": "da1421e6bf7e7bbc395d20c83d6b7b2e017d12c0464ad77c08a78c15a1c57014"
+              }
+            }
+          }
+        }
+      ]
     }
   ]
 }
